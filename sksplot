@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# Shell script to create a postscript file of trench velocities using SKS7a-MORVEL56
+# set of angular velocities using GMT
+plot=SKStp.ps
+#
+# create plot, add MORVEL56 boundaries, subduction zone names, overriding plate markers
+pscoast -R-280/80/-67/65 -JM22c -B30We -B60Sn -G200 -K > $plot
+psxy All_boundaries -R -J -B -Wthinnest,50 -K -O -: >> $plot
+#pstext subznnms -R -J -B -Gblack -K -O -: >> $plot
+psxy trenchesleft -R -J -B -Sf0.4c/0.1clt:0.1 -Gblack -Wthinner -K -O -: >> $plot
+psxy trenchesright -R -J -B -Sf0.4c/0.1crt:0.1 -Gblack -Wthinner -K -O -: >> $plot
+#
+# add 40Myr plate movement, trench perpendicular velocities, legend
+psxy dpltovertime -R -J -B -m -Wthinner,blue -K -O -: >> $plot
+#psxy SKSM56_vtp -R -J -B -SV0.025c/0.073c/0.03c -Gred -K -O -: >> $plot
+psxy SKSM56_vtp_40 -R -J -B -SV0.05c/0.15c/0.08cn0.15 -Gred -K -O -: >> $plot
+pstext SKSM56_legendtext -R -J -B -Gblack -K -O >> $plot
+#
+# show PA poles for 3 different reference frames
+#psxy papoles -R -J -B -Sc -CGMT_rainbow.cpt -Wblack -K -O -: >> $plot
+#pstext papolestext -R -J -B -Gblack -K -O -: >> $plot
+#
+# show the postscript file on the screen
+evince $plot
